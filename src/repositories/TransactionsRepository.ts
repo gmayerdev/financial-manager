@@ -19,13 +19,29 @@ class TransactionsRepository {
     this.transactions = [];
   }
 
-  // public all(): Transaction[] {
-  //   // TODO
-  // }
+  public all(): Transaction[] {
+    return this.transactions;
+  }
 
-  // public getBalance(): Balance {
-  //   // TODO
-  // }
+  public getBalance(): Balance {
+    const totalIncome = this.transactions
+      .filter(({ type }) => type === 'income')
+      .reduce((total, tra) => total + tra.value, 0);
+
+    const totalOutcome = this.transactions
+      .filter(({ type }) => type === 'outcome')
+      .reduce((total, tra) => total + tra.value, 0);
+
+    const total = totalIncome - totalOutcome;
+
+    const totalBalance = {
+      income: totalIncome,
+      outcome: totalOutcome,
+      total,
+    };
+
+    return totalBalance;
+  }
 
   public create({ title, value, type }: CreateTransactionDTO): Transaction {
     const transaction = new Transaction({ title, value, type });
